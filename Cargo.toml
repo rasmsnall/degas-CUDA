@@ -1,0 +1,30 @@
+[package]
+name = "degas-cuda"
+version = "0.1.0"
+edition = "2024"
+description = "A lightweight, ergonomic library for GPU acceleration using CUDA in Rust"
+license = "MIT"
+keywords = ["cuda", "gpu", "compute", "parallel", "acceleration"]
+categories = ["science", "hardware-support"]
+rust-version = "1.75"
+
+[dependencies]
+# cudarc provides safe Rust wrappers around the CUDA driver API.
+# The "nvrtc" feature is required for the `Ptx` type used to load PTX modules.
+cudarc = { version = "0.19", features = ["nvrtc"] }
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+default = []
+
+# Enable `degas_cuda::compile_ptx` for compiling CUDA C source to PTX at runtime.
+# Requires the NVRTC shared library (libnvrtc / nvrtc64.dll) to be present at runtime.
+nvrtc-compile = []
+
+[[example]]
+name = "device_info"
+
+[[example]]
+name = "vector_add"
