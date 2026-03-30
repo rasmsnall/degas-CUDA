@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use cudarc::driver::{CudaFunction, CudaStream, DeviceRepr, LaunchArgs, LaunchConfig};
+use cudarc::driver::{CudaFunction, CudaStream, DeviceRepr, LaunchArgs, LaunchConfig, PushKernelArg};
 
 use crate::Result;
 
@@ -117,8 +117,11 @@ impl<'a> KernelLaunch<'a> {
     }
 
     /// Direct access to the underlying [`LaunchArgs`] if you need something
-    /// this wrapper doesn't expose, like recording timing events or doing a
-    /// cooperative launch.
+    /// we don't expose, like recording timing events or doing a cooperative
+    /// launch.
+    ///
+    /// Note: to call `.arg()` on the returned `LaunchArgs` you need
+    /// `cudarc::driver::PushKernelArg` in scope — it's a trait method.
     pub fn raw_args(&mut self) -> &mut LaunchArgs<'a> {
         &mut self.args
     }

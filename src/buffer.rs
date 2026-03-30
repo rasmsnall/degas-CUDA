@@ -32,8 +32,8 @@ impl<T: DeviceRepr> GpuBuffer<T> {
         self.inner.num_bytes()
     }
 
-    /// A read-only view into the buffer. Useful for passing sub-ranges to
-    /// kernels without making a copy.
+    /// A read-only view into the buffer. Good for slicing out a sub-range
+    /// and passing it to a kernel without copying.
     #[inline]
     pub fn as_view(&self) -> CudaView<'_, T> {
         self.inner.as_view()

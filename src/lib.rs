@@ -37,6 +37,43 @@
 //! }
 //! ```
 //!
+//! ## Setup — picking the right CUDA version feature
+//!
+//! cudarc needs to know which CUDA version to build against. **The version
+//! must match what your driver supports, not the CUDA toolkit version.**
+//! These are often different — the toolkit can be newer than the driver.
+//!
+//! Run `nvidia-smi` and read the "CUDA Version" field in the top-right corner:
+//!
+//! ```text
+//! +---------------------------+
+//! | Driver Version: 591.59    |
+//! | CUDA Version: 13.1        |  ← use this number
+//! +---------------------------+
+//! ```
+//!
+//! Then set the matching feature in your `Cargo.toml`. For CUDA 13.1 that's
+//! `cuda-13010` (major=13, minor=01, patch=0):
+//!
+//! ```toml
+//! [dependencies]
+//! degas-cuda = { version = "0.1", features = ["cuda-13010"] }
+//! ```
+//!
+//! Available version features (from cudarc 0.19):
+//! `cuda-11040` through `cuda-13020`. If you use a version higher than what
+//! your driver supports, you'll get a runtime panic on startup complaining
+//! about a missing symbol in `nvcuda.dll` / `libcuda.so`. When that happens,
+//! lower the version until it matches `nvidia-smi`.
+//!
+//! ## Using `PushKernelArg` directly
+//!
+//! If you go through [`KernelLaunch::raw_args`] to build a launch manually,
+//! you need `cudarc::driver::PushKernelArg` in scope to call `.arg()` on the
+//! underlying `LaunchArgs`. The `arg_buf` / `arg_buf_mut` / `arg_val` methods
+//! on [`KernelLaunch`] already do this, so it only comes up if you're dropping
+//! down to `raw_args`.
+//!
 //! ## Feature flags
 //!
 //! | Flag | What it does |

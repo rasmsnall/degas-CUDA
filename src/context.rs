@@ -24,7 +24,7 @@ use crate::{DeviceInfo, Error, GpuBuffer, GpuConfig, GpuKernel, GpuModule, Kerne
 /// # Ok::<(), degas_cuda::Error>(())
 /// ```
 ///
-/// To customise which GPU or change launch settings, load a config:
+/// To change which GPU is used or adjust launch settings, load a config:
 ///
 /// ```no_run
 /// use degas_cuda::{GpuConfig, GpuContext};
@@ -153,7 +153,7 @@ impl GpuContext {
 
     /// Load a PTX module from a file path. The file is read at runtime.
     pub fn load_ptx_file(&self, path: impl AsRef<Path>) -> Result<GpuModule> {
-        self.load_module(Ptx::from_file(path))
+        self.load_module(Ptx::from_file(path.as_ref().to_path_buf()))
     }
 
     // ── Kernel launch ────────────────────────────────────────────────────────
@@ -213,9 +213,9 @@ impl GpuContext {
 
     // ── Advanced access ──────────────────────────────────────────────────────
 
-    /// Create a second stream on the same device. Useful if you want to overlap
-    /// transfers and kernel execution, or run work from multiple threads
-    /// concurrently.
+    /// Create a second stream on the same device. Use this when you want to
+    /// overlap transfers with kernel execution, or run work from multiple
+    /// threads at the same time.
     pub fn new_stream(&self) -> Result<Arc<CudaStream>> {
         self.ctx.new_stream().map_err(Error::Driver)
     }
@@ -225,8 +225,8 @@ impl GpuContext {
         &self.stream
     }
 
-    /// The underlying cudarc `CudaContext`, in case you need something this
-    /// wrapper doesn't expose.
+    /// The underlying cudarc `CudaContext`, in case you need something we
+    /// don't expose.
     pub fn raw(&self) -> &Arc<CudaContext> {
         &self.ctx
     }
