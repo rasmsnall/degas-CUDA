@@ -17,7 +17,7 @@ impl std::fmt::Display for DeviceInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Device {} — {} (SM {}.{}, {:.1} GiB)",
+            "Device {}: {} (SM {}.{}, {:.1} GiB)",
             self.ordinal,
             self.name,
             self.compute_capability.0,

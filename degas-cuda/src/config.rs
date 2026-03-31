@@ -6,9 +6,9 @@ use crate::Result;
 
 /// Settings for a [`GpuContext`][crate::GpuContext].
 ///
-/// You don't have to use this — [`GpuContext::new`][crate::GpuContext::new]
-/// covers the common case. But if you want to pick a specific GPU, tune the
-/// block size, or turn on debug synchronisation, this is where you do it.
+/// [`GpuContext::new`][crate::GpuContext::new] covers the common case, so
+/// this is optional. Use it when you want to pick a specific GPU, tune the
+/// block size, or turn on debug synchronisation.
 ///
 /// Every field is optional in the JSON file. Anything you leave out just gets
 /// the default value, so `{}` is a valid config.
@@ -89,7 +89,7 @@ impl GpuConfig {
     }
 
     /// Read config from a file if it exists, or return the defaults if it
-    /// doesn't. Good for making the config file optional — your program works
+    /// doesn't. Good for making the config file optional: your program works
     /// fine without one, and users can drop one in to override settings.
     ///
     /// Only returns an error if the file exists but is unreadable or broken.

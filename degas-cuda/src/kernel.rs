@@ -8,8 +8,8 @@ use crate::Result;
 ///
 /// Get one from [`GpuModule::get_kernel`][crate::GpuModule::get_kernel], then
 /// use [`GpuContext::prepare`][crate::GpuContext::prepare] to start setting up
-/// a launch. If you want to run it on a non-default stream, use [`on`][GpuKernel::on]
-/// directly.
+/// a launch. If you want to run it on a non-default stream, call
+/// [`on`][GpuKernel::on] directly.
 pub struct GpuKernel {
     pub(crate) inner: CudaFunction,
 }
@@ -18,9 +18,9 @@ impl GpuKernel {
     /// Set up a launch on a specific stream.
     ///
     /// Set `sync_after` to `true` if you want this launch to block until
-    /// the kernel finishes — handy for debugging. In normal use just call
-    /// [`GpuContext::prepare`][crate::GpuContext::prepare], which picks this
-    /// up from the config automatically.
+    /// the kernel finishes, which is handy for debugging. In normal use just
+    /// call [`GpuContext::prepare`][crate::GpuContext::prepare], which reads
+    /// this from the config automatically.
     pub fn on<'a>(&'a self, stream: &'a Arc<CudaStream>, sync_after: bool) -> KernelLaunch<'a> {
         KernelLaunch {
             args: stream.launch_builder(&self.inner),
@@ -30,16 +30,14 @@ impl GpuKernel {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-
 /// Builds up a kernel call before firing it.
 ///
 /// Push arguments in the same order the kernel expects them, then call
 /// [`execute`][KernelLaunch::execute]. That's it.
 ///
 /// If `sync_on_launch` is set in your [`GpuConfig`][crate::GpuConfig],
-/// `execute` will wait for the kernel to finish before returning — useful
-/// when you're trying to pin down where an error is coming from.
+/// `execute` will wait for the kernel to finish before returning, which is
+/// useful when you're trying to pin down where an error is coming from.
 ///
 /// ```no_run
 /// use degas_cuda::{GpuContext, LaunchConfig};
@@ -90,9 +88,9 @@ impl<'a> KernelLaunch<'a> {
 
     /// Fire the kernel.
     ///
-    /// The launch is asynchronous by default — it queues the work on the
-    /// stream and returns immediately. If `sync_on_launch` is on in your
-    /// config, it blocks until the GPU finishes before returning.
+    /// By default the launch is asynchronous: it queues work on the stream
+    /// and returns immediately. If `sync_on_launch` is on in your config,
+    /// it blocks until the GPU finishes before returning.
     ///
     /// # Safety
     ///
@@ -121,7 +119,7 @@ impl<'a> KernelLaunch<'a> {
     /// launch.
     ///
     /// Note: to call `.arg()` on the returned `LaunchArgs` you need
-    /// `cudarc::driver::PushKernelArg` in scope — it's a trait method.
+    /// `cudarc::driver::PushKernelArg` in scope, since it's a trait method.
     pub fn raw_args(&mut self) -> &mut LaunchArgs<'a> {
         &mut self.args
     }

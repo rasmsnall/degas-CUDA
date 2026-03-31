@@ -25,6 +25,17 @@ pub enum Error {
     /// A file read or write failed.
     #[error("I/O error: {0}")]
     Io(#[from] std::io::Error),
+
+    /// A `tokio::task::spawn_blocking` task panicked or was cancelled.
+    /// Only produced by `AsyncGpuContext`. The inner string carries the
+    /// panic message from the blocking thread.
+    #[error("async task join error: {0}")]
+    JoinError(String),
+
+    /// A dimension calculation (e.g. `width * height`) would overflow `usize`.
+    /// Reduce the requested dimensions.
+    #[error("dimension calculation overflows usize")]
+    DimensionOverflow,
 }
 
 /// Every fallible function in this crate returns this.

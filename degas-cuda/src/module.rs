@@ -10,7 +10,7 @@ use crate::{Error, GpuKernel, Result};
 /// [`GpuContext::load_ptx_file`][crate::GpuContext::load_ptx_file], or
 /// [`GpuContext::load_module`][crate::GpuContext::load_module].
 ///
-/// A single module can hold multiple kernels — call [`get_kernel`][GpuModule::get_kernel]
+/// A single module can hold multiple kernels. Call [`get_kernel`][GpuModule::get_kernel]
 /// for each one you need.
 pub struct GpuModule {
     pub(crate) inner: Arc<CudaModule>,
@@ -20,7 +20,7 @@ impl GpuModule {
     /// Get a kernel by the name of its `__global__` function.
     ///
     /// If your PTX was compiled from CUDA C++ (not `extern "C"`), the name
-    /// will be mangled — use `nvcc --ptx` and check the output to find the
+    /// will be mangled. Run `nvcc --ptx` and check the output to find the
     /// actual symbol name.
     ///
     /// ```no_run

@@ -1,0 +1,41 @@
+[package]
+name = "monet-cuda"
+version = "0.1.0"
+edition = "2024"
+description = "High-level GPU abstractions built on degas-cuda"
+license = "MIT"
+repository = "https://github.com/rasmsnall/degas-CUDA"
+keywords = ["cuda", "gpu", "compute", "image", "parallel"]
+categories = ["science", "hardware-support"]
+rust-version = "1.88"
+
+[dependencies]
+degas-cuda = { path = "../degas-cuda" }
+
+[features]
+default = []
+
+# Mirror all CUDA version features through to degas-cuda.
+# Pick the one matching your driver's CUDA version (same as you would for
+# degas-cuda directly). Run `nvidia-smi` and read the "CUDA Version" field.
+cuda-version-from-build-system = ["degas-cuda/cuda-version-from-build-system"]
+cuda-13020 = ["degas-cuda/cuda-13020"]
+cuda-13010 = ["degas-cuda/cuda-13010"]
+cuda-13000 = ["degas-cuda/cuda-13000"]
+cuda-12090 = ["degas-cuda/cuda-12090"]
+cuda-12080 = ["degas-cuda/cuda-12080"]
+cuda-12060 = ["degas-cuda/cuda-12060"]
+cuda-12050 = ["degas-cuda/cuda-12050"]
+cuda-12040 = ["degas-cuda/cuda-12040"]
+cuda-12030 = ["degas-cuda/cuda-12030"]
+cuda-12020 = ["degas-cuda/cuda-12020"]
+cuda-12010 = ["degas-cuda/cuda-12010"]
+cuda-12000 = ["degas-cuda/cuda-12000"]
+cuda-11080 = ["degas-cuda/cuda-11080"]
+cuda-11070 = ["degas-cuda/cuda-11070"]
+cuda-11060 = ["degas-cuda/cuda-11060"]
+cuda-11050 = ["degas-cuda/cuda-11050"]
+cuda-11040 = ["degas-cuda/cuda-11040"]
+
+[[example]]
+name = "canvas_demo"
